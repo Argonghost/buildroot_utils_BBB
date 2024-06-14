@@ -5,7 +5,27 @@ Buildroot utility for Beaglebone Black Board
 
 This is a bash script that runs all code to boot custom kernel to beaglebone black board via microSD card.  This is assuming that buildroot was successfully downloaded, and all ``make`` steps were done, and custom kernel was successfully cross compiled and ready to be mounted to microSD card.  This employs the common practice of partinioning the microSD card into a BOOT partition (FAT16 or 32), and a ROOTFS partition (EXT4).  In my opinion, using ``gparted`` is easiest to do that, and this is what I've done.  But we'll do it the long way.  
 
-After ```configure.sh``` is run, simply run ```sudo minicom -s```, and make sure serial port set up parameters look exactly like this:
+After ```configure.sh``` is run, all image-related files that are contained in ``~/buildroot/output/images/`` are successfully copied to the ``ROOTFS`` and ``BOOT`` partitions successfully.  
+
+Navigate next to the ``~/buildroot/output/images/`` and specifically the ``uEnc.txt`` file, and make sure it contains the following, which instructs the bootloader to load kernel from SD card:
+
+
+``    fdtfile=am335x-boneblack.dtb
+    fdtaddr=0x88000000
+    bootfile=zImage
+    loadaddr=0x82000000
+    console=ttyO0,115200n8
+    serverip=192.168.0.104
+    ipaddr=192.168.0.105
+    rootpath=/rootfs
+    netloadfdt=tftp ${fdtaddr} ${fdtfile}
+    netloadimage=tftp ${loadaddr} ${bootfile}
+    netargs=setenv bootargs console=${console} ${optargs} root=/dev/nfs nfsroot=${serverip}:${rootpath},nolock,nfsvers=3 rw rootwait ip=${ipaddr}
+    netboot=echo Booting from network ...; setenv autoload no; run netloadimage; run netloadfdt; run netargs; bootz ${loadaddr} - ${fdtaddr}
+    uenvcmd=run netboot``
+
+
+simply run ```sudo minicom -s```, and make sure serial port set up parameters look exactly like this:
 ```
     +-----------------------------------------------------------------------+
     | A -    Serial Device      : /dev/ttyUSB0                              |
@@ -26,16 +46,6 @@ After ```configure.sh``` is run, simply run ```sudo minicom -s```, and make sure
     |    Change which setting?                                              |
     +-----------------------------------------------------------------------+
 ```
-Then save and exit, and power off and power on the Beaglebone, and make sure to interrupt the bootloader around 1 or 2 seconds after you see the boot messages start to pop up.
-Then, we need to instruct bootloader to boot the linux kernel from microSD card, and not eMMC, and that is by explicitly telling it where to find the linux image, and .dtb file, and also by precisely telling it where to load from in the memory frame.
-```
-fatload mmc 0:1 0x82000000 zImage 
-fatload mmc 0:1 0x88000000 am335x-boneblack.dtb 
-setenv bootargs console=ttyS0,115200n8 root=/dev/mmcblk0p2 rw rootfstype=ext4 rootwait
-
-bootz 0x82000000 - 0x88000000
-```
-Then we're done, we should see a welcome message from buildroot. 
-
+Then save and exit, and power off and power on the Beaglebone, and we're done, we should see a welcome message from buildroot. 
 
 
