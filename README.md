@@ -10,7 +10,7 @@ After ```configure.sh``` is run, all image-related files that are contained in `
 Navigate next to the ``~/buildroot/output/images/`` and specifically the ``uEnc.txt`` file, and make sure it contains the following, which instructs the bootloader to load kernel from SD card:
 
 
-``    fdtfile=am335x-boneblack.dtb
+```    fdtfile=am335x-boneblack.dtb
     fdtaddr=0x88000000
     bootfile=zImage
     loadaddr=0x82000000
@@ -22,7 +22,8 @@ Navigate next to the ``~/buildroot/output/images/`` and specifically the ``uEnc.
     netloadimage=tftp ${loadaddr} ${bootfile}
     netargs=setenv bootargs console=${console} ${optargs} root=/dev/nfs nfsroot=${serverip}:${rootpath},nolock,nfsvers=3 rw rootwait ip=${ipaddr}
     netboot=echo Booting from network ...; setenv autoload no; run netloadimage; run netloadfdt; run netargs; bootz ${loadaddr} - ${fdtaddr}
-    uenvcmd=run netboot``
+    uenvcmd=run netboot
+```
 
 
 simply run ```sudo minicom -s```, and make sure serial port set up parameters look exactly like this:
