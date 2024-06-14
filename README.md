@@ -7,8 +7,7 @@ This is a bash script that runs all code to boot custom kernel to beaglebone bla
 
 After ```configure.sh``` is run, all image-related files that are contained in ``~/buildroot/output/images/`` are successfully copied to the ``ROOTFS`` and ``BOOT`` partitions successfully.  
 
-Navigate next to the ``~/buildroot/output/images/`` and specifically the ``uEnc.txt`` file, and make sure it contains the following, which instructs the bootloader to load kernel from SD card:
-
+Navigate next to the ``~/buildroot/output/images/`` and specifically the ``uEnv.txt`` file, and make sure it contains the following, which instructs the bootloader to load kernel from SD card:
 
 ```    fdtfile=am335x-boneblack.dtb
     fdtaddr=0x88000000
