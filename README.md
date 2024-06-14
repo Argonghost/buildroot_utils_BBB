@@ -9,19 +9,14 @@ After ```configure.sh``` is run, all image-related files that are contained in `
 
 Navigate next to the ``~/buildroot/output/images/`` and specifically the ``uEnv.txt`` file, and make sure it contains the following, which instructs the bootloader to load kernel from SD card:
 
-```    fdtfile=am335x-boneblack.dtb
-    fdtaddr=0x88000000
+``` bootpart=0:1
+    devtype=mmc
+    bootdir=
     bootfile=zImage
-    loadaddr=0x82000000
-    console=ttyO0,115200n8
-    serverip=192.168.0.104
-    ipaddr=192.168.0.105
-    rootpath=/rootfs
-    netloadfdt=tftp ${fdtaddr} ${fdtfile}
-    netloadimage=tftp ${loadaddr} ${bootfile}
-    netargs=setenv bootargs console=${console} ${optargs} root=/dev/nfs nfsroot=${serverip}:${rootpath},nolock,nfsvers=3 rw rootwait ip=${ipaddr}
-    netboot=echo Booting from network ...; setenv autoload no; run netloadimage; run netloadfdt; run netargs; bootz ${loadaddr} - ${fdtaddr}
-    uenvcmd=run netboot
+    bootpartition=mmcblk0p2
+    set_mmc1=if test $board_name = A33515BB; then setenv bootpartition mmcblk1p2; fi
+    set_bootargs=setenv bootargs console=ttyO0,115200n8 root=/dev/${bootpartition} rw rootfstype=ext4 rootwait
+    uenvcmd=run set_mmc1; run set_bootargs;run loadimage;run loadfdt;printenv bootargs;bootz ${loadaddr} - ${fdtaddr} 
 ```
 
 
