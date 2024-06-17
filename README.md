@@ -42,8 +42,10 @@ simply run ```sudo minicom -s```, and make sure serial port set up parameters lo
 ```
 Then save and exit, and power off and power on the Beaglebone, and we're done, we should see a welcome message from buildroot upon powering up the BBB.
 In the case where the commands from the custom ``uEnv.txt`` do not work and BBB doesnt boot from SD card, the command below is a more guaranteed command that you can use. Its a ``uboot`` command that you should invoke upon interrupting the bootloader 1-2 seconds after connecting to the console:
-```setenv bootcmd 'fatload mmc 0:1 ${loadaddr} zImage; fatload mmc 0:1 ${fdtaddr} am335x-boneblack.dtb; bootz ${loadaddr} - ${fdtaddr}'
+```setenv bootcmd 'fatload mmc 0:1 ${loadaddr} zImage; fatload mmc 0:1 ${fdtaddr} am335x-boneblack.dtb; bootz ${loadaddr} - ${fdtaddr}
 ```
+
+This should work now without requiring you to interrupt bootloader or anything.
 
 
 
