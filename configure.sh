@@ -10,10 +10,10 @@ cat /proc/partitions | grep sdc
 sudo mkfs.vfat -F 32 -n BOOT /dev/sdc1
 sudo mkfs.ext4 -L rootfs -E nodiscard  /dev/sdc2
 cp MLO /media/$USER/BOOT/
-cp u-boot.img /medie/$USER/BOOT/
+cp u-boot.img /media/$USER/BOOT/
 cp zImage /media/$USER/BOOT/
 cp am335x-boneblack.dtb /media/$USER/BOOT/
-sudo tar -C /media/$USER/rootfs/ -xf rootfs.tar .
+sudo tar -C /media/$USER/ROOTFS/ -xf rootfs.tar .
 
 
 
